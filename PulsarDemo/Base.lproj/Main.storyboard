@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7515.2" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7512"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="PulsarDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ReK-aN-Kfd">
+                                <rect key="frame" x="219" y="64" width="163" height="438"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HVt-Fx-Bsq" customClass="CircleButton" customModule="PulsarDemo">
+                                        <rect key="frame" x="31" y="67" width="100" height="100"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="100" id="5pm-lk-3k9"/>
+                                            <constraint firstAttribute="height" constant="100" id="huD-L9-N0L"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <state key="normal">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="didTriggerActionOnCircleButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zG8-nw-252"/>
+                                        </connections>
+                                    </button>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lir-xK-goB">
+                                        <rect key="frame" x="57" y="347" width="51" height="31"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="49" id="W49-5c-cTn"/>
+                                            <constraint firstAttribute="height" constant="31" id="pZO-gL-Jbh"/>
+                                        </constraints>
+                                        <connections>
+                                            <action selector="didTriggerActionOnSwitch:" destination="BYZ-38-t0r" eventType="valueChanged" id="BzW-96-KCd"/>
+                                        </connections>
+                                    </switch>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sp0-7d-T7Z">
+                                        <rect key="frame" x="18" y="302" width="127" height="31"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="ZI3-9E-IHN"/>
+                                            <constraint firstAttribute="width" constant="123" id="cRq-Ih-iWd"/>
+                                        </constraints>
+                                        <connections>
+                                            <action selector="didTriggerActionOnSlider:" destination="BYZ-38-t0r" eventType="valueChanged" id="OI9-mt-DYn"/>
+                                        </connections>
+                                    </slider>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="u0d-hI-n3b">
+                                        <rect key="frame" x="71" y="398" width="20" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="OCv-2e-gm1"/>
+                                            <constraint firstAttribute="width" constant="20" id="tBl-y7-S6A"/>
+                                        </constraints>
+                                    </activityIndicatorView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="23P-Qs-F40" customClass="StarButton" customModule="PulsarDemo">
+                                        <rect key="frame" x="31" y="182" width="100" height="100"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="100" id="acG-Uh-fLY"/>
+                                            <constraint firstAttribute="width" constant="100" id="nMN-C8-wEk"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <state key="normal">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="didTriggerActionOnStarButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GrO-kz-gnh"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d4g-9Y-eFe" customClass="RoundedRectButton" customModule="PulsarDemo">
+                                        <rect key="frame" x="17" y="11" width="129" height="43"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="43" id="Zcq-ih-LGw"/>
+                                            <constraint firstAttribute="width" constant="129" id="cPx-yq-J3h"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <state key="normal">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="didTriggerActionOnRoundedRectButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vAJ-EV-VTB"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="lir-xK-goB" firstAttribute="top" secondItem="Sp0-7d-T7Z" secondAttribute="bottom" constant="15" id="5GD-nR-Syn"/>
+                                    <constraint firstAttribute="centerX" secondItem="d4g-9Y-eFe" secondAttribute="centerX" id="8rm-Ab-mef"/>
+                                    <constraint firstAttribute="width" constant="163" id="9TT-O1-RT4"/>
+                                    <constraint firstItem="u0d-hI-n3b" firstAttribute="top" secondItem="lir-xK-goB" secondAttribute="bottom" constant="20" id="Dku-2f-7l8"/>
+                                    <constraint firstItem="lir-xK-goB" firstAttribute="top" secondItem="Sp0-7d-T7Z" secondAttribute="bottom" constant="15" id="FG6-qF-29I"/>
+                                    <constraint firstAttribute="centerX" secondItem="Sp0-7d-T7Z" secondAttribute="centerX" id="HBc-Ev-D2S"/>
+                                    <constraint firstItem="d4g-9Y-eFe" firstAttribute="top" secondItem="ReK-aN-Kfd" secondAttribute="top" constant="11" id="Md9-Yc-XhP"/>
+                                    <constraint firstAttribute="height" constant="438" id="ODl-6p-i2e"/>
+                                    <constraint firstItem="HVt-Fx-Bsq" firstAttribute="top" secondItem="d4g-9Y-eFe" secondAttribute="bottom" constant="13" id="RcX-yJ-zAC"/>
+                                    <constraint firstAttribute="centerX" secondItem="lir-xK-goB" secondAttribute="centerX" id="Vqk-6r-jo9"/>
+                                    <constraint firstItem="Sp0-7d-T7Z" firstAttribute="top" secondItem="23P-Qs-F40" secondAttribute="bottom" constant="20" id="fWH-k5-HNA"/>
+                                    <constraint firstAttribute="centerX" secondItem="u0d-hI-n3b" secondAttribute="centerX" id="gsy-5W-FsX"/>
+                                    <constraint firstAttribute="centerX" secondItem="HVt-Fx-Bsq" secondAttribute="centerX" id="jOo-2N-QiO"/>
+                                    <constraint firstItem="u0d-hI-n3b" firstAttribute="top" secondItem="lir-xK-goB" secondAttribute="bottom" constant="20" id="rUM-1U-ni6"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="433" id="tmD-FX-2b7"/>
+                                    <constraint firstAttribute="centerX" secondItem="23P-Qs-F40" secondAttribute="centerX" id="wqI-81-fkR"/>
+                                    <constraint firstItem="23P-Qs-F40" firstAttribute="top" secondItem="HVt-Fx-Bsq" secondAttribute="bottom" constant="15" id="xyT-xi-y3W"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="163" id="zPC-aW-AXF"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerY" secondItem="ReK-aN-Kfd" secondAttribute="centerY" constant="17" id="LB5-3T-Sp5"/>
+                            <constraint firstAttribute="centerX" secondItem="ReK-aN-Kfd" secondAttribute="centerX" id="sFa-H3-svs"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="activityIndicatorView" destination="u0d-hI-n3b" id="cjO-EL-R2z"/>
+                        <outlet property="containerView" destination="ReK-aN-Kfd" id="otO-VK-3Jq"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+</document>
