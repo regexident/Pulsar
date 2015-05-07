@@ -51,8 +51,8 @@ extension CALayer {
 		alphaAnimation.toValue = 0.0
 		
 		let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
-		scaleAnimation.fromValue = NSValue(CATransform3D: CATransform3DIdentity)
-		scaleAnimation.toValue = NSValue(CATransform3D: CATransform3DMakeScale(2.0, 2.0, 1.0))
+		scaleAnimation.fromValue = NSValue(CATransform3D: builder.transformBefore)
+		scaleAnimation.toValue = NSValue(CATransform3D: builder.transformAfter)
 		
 		var animations: [CAAnimation] = [alphaAnimation, scaleAnimation]
 		
@@ -114,6 +114,8 @@ public class Builder {
 	public var duration: NSTimeInterval = 1.0
 	public var repeatCount: Int = 0
 	public var lineWidth: CGFloat = 3.0
+	public var transformBefore: CATransform3D = CATransform3DIdentity
+	public var transformAfter: CATransform3D = CATransform3DMakeScale(2.0, 2.0, 1.0)
 	public var startBlock: PulsarStartClosure? = nil
 	public var stopBlock: PulsarStopClosure? = nil
 	
