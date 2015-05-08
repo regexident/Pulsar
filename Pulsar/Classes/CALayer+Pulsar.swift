@@ -14,13 +14,13 @@ extension CALayer {
 	
 	public func addPulse(closure: PulsarClosure? = nil) -> CAShapeLayer? {
 		if (self.masksToBounds) {
-			println("Aborting. CALayers with 'masksToBounds' set to YES cannot show pulse.");
-			return nil;
+			println("Aborting. CALayers with 'masksToBounds' set to YES cannot show pulse.")
+			return nil
 		}
 		
 		let builder = Builder(self)
 		if let closure = closure {
-			closure(builder);
+			closure(builder)
 		}
 		
 		let pulseLayer = CAShapeLayer()
@@ -58,19 +58,19 @@ extension CALayer {
 		
 		if (builder.borderColors.count > 1) {
 			let colorAnimation = CAKeyframeAnimation(keyPath: "strokeColor")!
-			colorAnimation.values = builder.borderColors;
+			colorAnimation.values = builder.borderColors
 			animations.append(colorAnimation)
 		}
 		
 		if (builder.backgroundColors.count > 1) {
 			let colorAnimation = CAKeyframeAnimation(keyPath: "fillColor")!
-			colorAnimation.values = builder.backgroundColors;
+			colorAnimation.values = builder.backgroundColors
 			animations.append(colorAnimation)
 		}
 		
 		let animationGroup = CAAnimationGroup()
-		animationGroup.duration = builder.duration;
-		animationGroup.animations = animations;
+		animationGroup.duration = builder.duration
+		animationGroup.animations = animations
 		animationGroup.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
 		animationGroup.repeatCount = Float(min(Float(builder.repeatCount), FLT_MAX))
 		animationGroup.delegate = Delegate(pulseLayer: pulseLayer)

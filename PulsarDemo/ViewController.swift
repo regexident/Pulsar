@@ -41,7 +41,7 @@ class ViewController: UIViewController {
 			builder.path = UIBezierPath(ovalInRect: self.activityIndicatorView.bounds).CGPath
 			builder.duration *= 2.0
 			builder.repeatCount = Int.max
-			builder.lineWidth = 2.0;
+			builder.lineWidth = 2.0
 			builder.backgroundColors = []
 		}
 	}
