@@ -49,10 +49,12 @@ extension CALayer {
 		let alphaAnimation = CABasicAnimation(keyPath: "opacity")
 		alphaAnimation.fromValue = 1.0
 		alphaAnimation.toValue = 0.0
+		alphaAnimation.duration = max(builder.duration, 0.0)
 		
 		let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
 		scaleAnimation.fromValue = NSValue(CATransform3D: builder.transformBefore)
 		scaleAnimation.toValue = NSValue(CATransform3D: builder.transformAfter)
+		scaleAnimation.duration = max(builder.duration, 0.0)
 		
 		var animations: [CAAnimation] = [alphaAnimation, scaleAnimation]
 		
@@ -69,7 +71,10 @@ extension CALayer {
 		}
 		
 		let animationGroup = CAAnimationGroup()
-		animationGroup.duration = builder.duration
+		animationGroup.duration = max(builder.duration, 0.0)
+		if builder.repeatCount > 0 {
+			animationGroup.duration += max(builder.repeatDelay, 0.0)
+		}
 		animationGroup.animations = animations
 		animationGroup.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
 		animationGroup.repeatCount = Float(min(Float(builder.repeatCount), FLT_MAX))
@@ -112,6 +117,7 @@ public class Builder {
 	public var backgroundColors: [CGColor]
 	public var path: CGPathRef
 	public var duration: NSTimeInterval = 1.0
+	public var repeatDelay: NSTimeInterval = 0.0
 	public var repeatCount: Int = 0
 	public var lineWidth: CGFloat = 3.0
 	public var transformBefore: CATransform3D = CATransform3DIdentity

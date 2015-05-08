@@ -36,10 +36,12 @@ class ViewController: UIViewController {
 	
 	func addRepeatingPulseToProgressIndicator() {
 		self.activityIndicatorView.layer.addPulse { builder in
-			builder.borderColors = [UIColor.blackColor().CGColor]
+			builder.borderColors = [UIColor.clearColor().CGColor, UIColor.blackColor().CGColor]
 			builder.backgroundColors = colorsWithHalfOpacity(builder.borderColors)
 			builder.path = UIBezierPath(ovalInRect: self.activityIndicatorView.bounds).CGPath
-			builder.duration *= 2.0
+			builder.transformBefore = CATransform3DMakeScale(0.65, 0.65, 0.0)
+			builder.duration = 2.0
+			builder.repeatDelay = 0.0
 			builder.repeatCount = Int.max
 			builder.lineWidth = 2.0
 			builder.backgroundColors = []
