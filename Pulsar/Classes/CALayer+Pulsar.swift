@@ -14,7 +14,7 @@ extension CALayer {
 	
 	public func addPulse(closure: PulsarClosure? = nil) -> CAShapeLayer? {
 		if (self.masksToBounds) {
-			println("Aborting. CALayers with 'masksToBounds' set to YES cannot show pulse.")
+			print("Aborting. CALayers with 'masksToBounds' set to YES cannot show pulse.")
 			return nil
 		}
 		
@@ -59,13 +59,13 @@ extension CALayer {
 		var animations: [CAAnimation] = [alphaAnimation, scaleAnimation]
 		
 		if (builder.borderColors.count > 1) {
-			let colorAnimation = CAKeyframeAnimation(keyPath: "strokeColor")!
+			let colorAnimation = CAKeyframeAnimation(keyPath: "strokeColor")
 			colorAnimation.values = builder.borderColors
 			animations.append(colorAnimation)
 		}
 		
 		if (builder.backgroundColors.count > 1) {
-			let colorAnimation = CAKeyframeAnimation(keyPath: "fillColor")!
+			let colorAnimation = CAKeyframeAnimation(keyPath: "fillColor")
 			colorAnimation.values = builder.backgroundColors
 			animations.append(colorAnimation)
 		}
@@ -137,17 +137,17 @@ public class Builder {
 		case let shapeLayer as CAShapeLayer:
 			if let fillColor = shapeLayer.fillColor {
 				let halfAlpha = CGColorGetAlpha(fillColor) * 0.5
-				return [CGColorCreateCopyWithAlpha(fillColor, halfAlpha)]
+				return [CGColorCreateCopyWithAlpha(fillColor, halfAlpha)!]
 			}
 		default:
 			if let backgroundColor = layer.backgroundColor {
 				let halfAlpha = CGColorGetAlpha(backgroundColor) * 0.5
-				return [CGColorCreateCopyWithAlpha(backgroundColor, halfAlpha)]
+				return [CGColorCreateCopyWithAlpha(backgroundColor, halfAlpha)!]
 			}
 		}
 		let colorSpace = CGColorSpaceCreateDeviceRGB()
 		let components: [CGFloat] = [1.0, 0.0, 0.0, 0.0]
-		return [CGColorCreate(colorSpace, components)]
+		return [CGColorCreate(colorSpace, components)!]
 	}
 	
 	class func defaultBorderColorsForLayer(layer: CALayer) -> [CGColor] {
@@ -175,13 +175,13 @@ public class Builder {
 		}
 		let colorSpace = CGColorSpaceCreateDeviceRGB()
 		let components: [CGFloat] = [1.0, 0.0, 0.0, 0.0]
-		return [CGColorCreate(colorSpace, components)]
+		return [CGColorCreate(colorSpace, components)!]
 	}
 	
 	class func defaultPathForLayer(layer: CALayer) -> CGPathRef {
 		switch layer {
 		case let shapeLayer as CAShapeLayer:
-			return shapeLayer.path
+			return shapeLayer.path!
 		default:
 			let rect = layer.bounds
 			let minSize = min(CGRectGetWidth(rect), CGRectGetHeight(rect))
@@ -213,7 +213,7 @@ class Delegate {
 	
 	func animationDidStop(animation: CAAnimation, finished: Bool) {
 		if var pulseLayers = self.pulseLayer.superlayer?.pulsarLayers as? [CAShapeLayer] {
-			if let index = find(pulseLayers, self.pulseLayer) {
+			if let index = pulseLayers.indexOf(self.pulseLayer) {
 				pulseLayers.removeAtIndex(index)
 				self.pulseLayer.removeFromSuperlayer()
 				if let stopBlock = self.stopBlock {

@@ -9,7 +9,7 @@
 import UIKit
 
 class CircleButton: UIButton {
-	required init(coder decoder: NSCoder) {
+	required init?(coder decoder: NSCoder) {
 		super.init(coder: decoder)
 		self.layer.cornerRadius = CircleButton.cornerRadiusForRect(self.bounds)
 		self.applyTheme()

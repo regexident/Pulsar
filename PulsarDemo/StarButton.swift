@@ -10,7 +10,7 @@ import UIKit
 
 class StarButton: UIButton {
 	
-	required init(coder decoder: NSCoder) {
+	required init?(coder decoder: NSCoder) {
 		super.init(coder: decoder)
 		let shapeLayer = self.layer as! CAShapeLayer
 		shapeLayer.path = StarButton.pathForRect(self.bounds)

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7515.2" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A279b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7512"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -21,6 +22,7 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HVt-Fx-Bsq" customClass="CircleButton" customModule="PulsarDemo">
                                         <rect key="frame" x="31" y="67" width="100" height="100"/>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="5pm-lk-3k9"/>
                                             <constraint firstAttribute="height" constant="100" id="huD-L9-N0L"/>
@@ -35,6 +37,7 @@
                                     </button>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lir-xK-goB">
                                         <rect key="frame" x="57" y="347" width="51" height="31"/>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="49" id="W49-5c-cTn"/>
                                             <constraint firstAttribute="height" constant="31" id="pZO-gL-Jbh"/>
@@ -45,6 +48,7 @@
                                     </switch>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sp0-7d-T7Z">
                                         <rect key="frame" x="18" y="302" width="127" height="31"/>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="ZI3-9E-IHN"/>
                                             <constraint firstAttribute="width" constant="123" id="cRq-Ih-iWd"/>
@@ -55,6 +59,7 @@
                                     </slider>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="u0d-hI-n3b">
                                         <rect key="frame" x="71" y="398" width="20" height="20"/>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="OCv-2e-gm1"/>
                                             <constraint firstAttribute="width" constant="20" id="tBl-y7-S6A"/>
@@ -62,6 +67,7 @@
                                     </activityIndicatorView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="23P-Qs-F40" customClass="StarButton" customModule="PulsarDemo">
                                         <rect key="frame" x="31" y="182" width="100" height="100"/>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="acG-Uh-fLY"/>
                                             <constraint firstAttribute="width" constant="100" id="nMN-C8-wEk"/>
@@ -76,6 +82,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d4g-9Y-eFe" customClass="RoundedRectButton" customModule="PulsarDemo">
                                         <rect key="frame" x="17" y="11" width="129" height="43"/>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="43" id="Zcq-ih-LGw"/>
                                             <constraint firstAttribute="width" constant="129" id="cPx-yq-J3h"/>
@@ -89,6 +96,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
+                                <animations/>
                                 <constraints>
                                     <constraint firstItem="lir-xK-goB" firstAttribute="top" secondItem="Sp0-7d-T7Z" secondAttribute="bottom" constant="15" id="5GD-nR-Syn"/>
                                     <constraint firstAttribute="centerX" secondItem="d4g-9Y-eFe" secondAttribute="centerX" id="8rm-Ab-mef"/>
@@ -111,6 +119,7 @@
                                 </constraints>
                             </view>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="centerY" secondItem="ReK-aN-Kfd" secondAttribute="centerY" constant="17" id="LB5-3T-Sp5"/>

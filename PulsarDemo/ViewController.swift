@@ -11,7 +11,7 @@ import UIKit
 import Pulsar
 
 func colorsWithHalfOpacity(colors: [CGColor]) -> [CGColor] {
-	return colors.map({ CGColorCreateCopyWithAlpha($0, CGColorGetAlpha($0) * 0.5) })
+	return colors.map({ CGColorCreateCopyWithAlpha($0, CGColorGetAlpha($0) * 0.5)! })
 }
 
 class ViewController: UIViewController {
@@ -75,8 +75,7 @@ class ViewController: UIViewController {
 	
 	@IBAction func didTriggerActionOnSlider(sender: UISlider) {
 		let subviews = sender.subviews
-		let view = subviews[2] as! UIView
-		
+		let view = subviews[2]
 		let delayTime = dispatch_time(DISPATCH_TIME_NOW,
 			Int64(0.2 * Double(NSEC_PER_SEC)))
 		dispatch_after(delayTime, dispatch_get_main_queue()) {
@@ -86,15 +85,15 @@ class ViewController: UIViewController {
 			view.layer.addPulse { builder in
 				builder.borderColors = [UIColor(hue: 0.6, saturation: saturation, brightness: 1.0, alpha: 1.0).CGColor]
 				builder.backgroundColors = colorsWithHalfOpacity(builder.borderColors)
-				builder.path = UIBezierPath(ovalInRect: bounds).CGPath
+				builder.path = path
 			}
 		}
 	}
 	
 	@IBAction func didTriggerActionOnSwitch(sender: UISwitch) {
-		let internalSubview = sender.subviews.first as! UIView
+		let internalSubview = sender.subviews.first!
 		let subviews = internalSubview.subviews
-		let view = subviews[3] as! UIView
+		let view = subviews[3]
 		let delayTime = dispatch_time(DISPATCH_TIME_NOW,
 			Int64(0.4 * Double(NSEC_PER_SEC)))
 		dispatch_after(delayTime, dispatch_get_main_queue()) {
