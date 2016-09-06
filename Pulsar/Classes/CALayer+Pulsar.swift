@@ -13,7 +13,7 @@ extension CALayer {
 	public typealias PulsarClosure = (Builder) -> ()
 	
 	public func addPulse(closure: PulsarClosure? = nil) -> CAShapeLayer? {
-		if (self.masksToBounds) {
+		guard self.masksToBounds == false else {
 			print("Aborting. CALayers with 'masksToBounds' set to YES cannot show pulse.")
 			return nil
 		}
@@ -40,11 +40,10 @@ extension CALayer {
 		CATransaction.commit()
 		
 		self.insertSublayer(pulseLayer, atIndex:0)
-		
-		if var pulsarLayers = self.pulsarLayers as? [CAShapeLayer] {
-			pulsarLayers.append(pulseLayer)
-			self.pulsarLayers = pulsarLayers
-		}
+
+        var pulsarLayers = self.pulsarLayers
+        pulsarLayers.append(pulseLayer)
+        self.pulsarLayers = pulsarLayers
 		
 		let alphaAnimation = CABasicAnimation(keyPath: "opacity")
 		alphaAnimation.fromValue = 1.0
@@ -84,7 +83,15 @@ extension CALayer {
 		return pulseLayer
 	}
 	
-	public func removePulses() {
+    public func removePulse(pulse: CAShapeLayer) {
+        if let index = self.pulsarLayers.indexOf({ $0 === pulse }) {
+            pulse.removeAllAnimations()
+            pulse.removeFromSuperlayer()
+            self.pulsarLayers.removeAtIndex(index)
+        }
+    }
+
+    public func removePulses() {
 		for pulseLayer in self.pulsarLayers {
 			pulseLayer.removeAllAnimations()
 			pulseLayer.removeFromSuperlayer()
@@ -92,13 +99,13 @@ extension CALayer {
 		self.pulsarLayers = []
 	}
 	
-	var pulsarLayers: NSArray {
+	var pulsarLayers: [CAShapeLayer] {
 		set {
 			self.setValue(newValue, forKey: PulsarConstants.layersKey)
 		}
 		get {
-			let pulsarLayers = self.valueForKey(PulsarConstants.layersKey) as? NSArray
-			return pulsarLayers ?? NSArray()
+			let pulsarLayers = self.valueForKey(PulsarConstants.layersKey) as? [CAShapeLayer]
+			return pulsarLayers ?? []
 		}
 	}
 }
@@ -212,14 +219,15 @@ class Delegate {
 	}
 	
 	func animationDidStop(animation: CAAnimation, finished: Bool) {
-		if var pulseLayers = self.pulseLayer.superlayer?.pulsarLayers as? [CAShapeLayer] {
-			if let index = pulseLayers.indexOf(self.pulseLayer) {
-				pulseLayers.removeAtIndex(index)
-				self.pulseLayer.removeFromSuperlayer()
-				if let stopBlock = self.stopBlock {
-					stopBlock(finished)
-				}
-			}
-		}
+        guard var pulseLayers = self.pulseLayer.superlayer?.pulsarLayers else {
+            return
+        }
+        if let index = pulseLayers.indexOf(self.pulseLayer) {
+            pulseLayers.removeAtIndex(index)
+            self.pulseLayer.removeFromSuperlayer()
+            if let stopBlock = self.stopBlock {
+                stopBlock(finished)
+            }
+        }
 	}
 }
