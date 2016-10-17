@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A411CF5E1A8501180053A6F8"
-               BuildableName = "Pulsar.framework"
-               BlueprintName = "Pulsar"
+               BlueprintIdentifier = "A411CF2E1A84D3090053A6F8"
+               BuildableName = "PulsarDemo.app"
+               BlueprintName = "PulsarDemo"
                ReferencedContainer = "container:Pulsar.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -29,6 +29,15 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "A411CF2E1A84D3090053A6F8"
+            BuildableName = "PulsarDemo.app"
+            BlueprintName = "PulsarDemo"
+            ReferencedContainer = "container:Pulsar.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -42,15 +51,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A411CF5E1A8501180053A6F8"
-            BuildableName = "Pulsar.framework"
-            BlueprintName = "Pulsar"
+            BlueprintIdentifier = "A411CF2E1A84D3090053A6F8"
+            BuildableName = "PulsarDemo.app"
+            BlueprintName = "PulsarDemo"
             ReferencedContainer = "container:Pulsar.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -60,15 +70,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A411CF5E1A8501180053A6F8"
-            BuildableName = "Pulsar.framework"
-            BlueprintName = "Pulsar"
+            BlueprintIdentifier = "A411CF2E1A84D3090053A6F8"
+            BuildableName = "PulsarDemo.app"
+            BlueprintName = "PulsarDemo"
             ReferencedContainer = "container:Pulsar.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

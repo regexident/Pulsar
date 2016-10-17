@@ -10,8 +10,8 @@ import UIKit
 
 import Pulsar
 
-func colorsWithHalfOpacity(colors: [CGColor]) -> [CGColor] {
-	return colors.map({ CGColorCreateCopyWithAlpha($0, CGColorGetAlpha($0) * 0.5)! })
+func colorsWithHalfOpacity(_ colors: [CGColor]) -> [CGColor] {
+	return colors.map({ $0.copy(alpha: $0.alpha * 0.5)! })
 }
 
 class ViewController: UIViewController {
@@ -22,12 +22,12 @@ class ViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		UIApplication.sharedApplication().statusBarStyle = .LightContent
+		UIApplication.shared.statusBarStyle = .lightContent
 		
-		self.view.backgroundColor = UIColor.lightGrayColor()
+		self.view.backgroundColor = UIColor.lightGray
 	}
 	
-	override func viewWillAppear(animated: Bool) {
+	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
 		self.addRepeatingPulseToProgressIndicator()
@@ -35,10 +35,10 @@ class ViewController: UIViewController {
 	}
 	
 	func addRepeatingPulseToProgressIndicator() {
-		self.activityIndicatorView.layer.addPulse { builder in
-			builder.borderColors = [UIColor.clearColor().CGColor, UIColor.blackColor().CGColor]
+		let _ = self.activityIndicatorView.layer.addPulse { builder in
+			builder.borderColors = [UIColor.clear.cgColor, UIColor.black.cgColor]
 			builder.backgroundColors = colorsWithHalfOpacity(builder.borderColors)
-			builder.path = UIBezierPath(ovalInRect: self.activityIndicatorView.bounds).CGPath
+			builder.path = UIBezierPath(ovalIn: self.activityIndicatorView.bounds).cgPath
 			builder.transformBefore = CATransform3DMakeScale(0.65, 0.65, 0.0)
 			builder.duration = 2.0
 			builder.repeatDelay = 0.0
@@ -48,66 +48,64 @@ class ViewController: UIViewController {
 		}
 	}
 
-	@IBAction func didTriggerActionOnStarButton(sender: StarButton) {
-		sender.layer.addPulse { builder in
+	@IBAction func didTriggerActionOnStarButton(_ sender: StarButton) {
+		let _ = sender.layer.addPulse { builder in
 			builder.borderColors = [
-				UIColor.greenColor().CGColor,
-				UIColor.yellowColor().CGColor,
-				UIColor.yellowColor().CGColor,
-				UIColor.redColor().CGColor
+				UIColor.green.cgColor,
+				UIColor.yellow.cgColor,
+				UIColor.yellow.cgColor,
+				UIColor.red.cgColor
 			]
 			builder.backgroundColors = colorsWithHalfOpacity(builder.borderColors)
 		}
 	}
 	
-	@IBAction func didTriggerActionOnRoundedRectButton(sender: RoundedRectButton) {
-		sender.layer.addPulse()
+	@IBAction func didTriggerActionOnRoundedRectButton(_ sender: RoundedRectButton) {
+		let _ = sender.layer.addPulse()
 	}
 	
-	@IBAction func didTriggerActionOnCircleButton(sender: CircleButton) {
-		sender.layer.addPulse { builder in
+	@IBAction func didTriggerActionOnCircleButton(_ sender: CircleButton) {
+		let _ = sender.layer.addPulse { builder in
 			builder.borderColors = [
-				UIColor(hue: CGFloat(rand()) / CGFloat(RAND_MAX), saturation: 1.0, brightness: 1.0, alpha: 1.0).CGColor
+				UIColor(hue: CGFloat(arc4random()) / CGFloat(RAND_MAX), saturation: 1.0, brightness: 1.0, alpha: 1.0).cgColor
 			]
 			builder.backgroundColors = colorsWithHalfOpacity(builder.borderColors)
 		}
 	}
 	
-	@IBAction func didTriggerActionOnSlider(sender: UISlider) {
+	@IBAction func didTriggerActionOnSlider(_ sender: UISlider) {
 		let subviews = sender.subviews
 		let view = subviews[2]
-		let delayTime = dispatch_time(DISPATCH_TIME_NOW,
-			Int64(0.2 * Double(NSEC_PER_SEC)))
-		dispatch_after(delayTime, dispatch_get_main_queue()) {
+		let delayTime = DispatchTime.now() + Double(Int64(0.2 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+		DispatchQueue.main.asyncAfter(deadline: delayTime) {
 			let bounds = view.bounds
-			let path = CGPathCreateWithEllipseInRect(bounds, nil)
+			let path = CGPath(ellipseIn: bounds, transform: nil)
 			let saturation = CGFloat(sender.value)
-			view.layer.addPulse { builder in
-				builder.borderColors = [UIColor(hue: 0.6, saturation: saturation, brightness: 1.0, alpha: 1.0).CGColor]
+			let _ = view.layer.addPulse { builder in
+				builder.borderColors = [UIColor(hue: 0.6, saturation: saturation, brightness: 1.0, alpha: 1.0).cgColor]
 				builder.backgroundColors = colorsWithHalfOpacity(builder.borderColors)
 				builder.path = path
 			}
 		}
 	}
 	
-	@IBAction func didTriggerActionOnSwitch(sender: UISwitch) {
+	@IBAction func didTriggerActionOnSwitch(_ sender: UISwitch) {
 		let internalSubview = sender.subviews.first!
 		let subviews = internalSubview.subviews
 		let view = subviews[3]
-		let delayTime = dispatch_time(DISPATCH_TIME_NOW,
-			Int64(0.4 * Double(NSEC_PER_SEC)))
-		dispatch_after(delayTime, dispatch_get_main_queue()) {
+		let delayTime = DispatchTime.now() + Double(Int64(0.4 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+		DispatchQueue.main.asyncAfter(deadline: delayTime) {
 			var bounds = view.bounds
-			bounds = CGRectMake(
-				CGRectGetMinX(bounds) + (CGRectGetWidth(bounds) - CGRectGetHeight(bounds)) / 2,
-				CGRectGetMinY(bounds),
-				CGRectGetHeight(bounds),
-				CGRectGetHeight(bounds)
+			bounds = CGRect(
+				x: bounds.minX + (bounds.width - bounds.height) / 2,
+				y: bounds.minY,
+				width: bounds.height,
+				height: bounds.height
 			)
-			view.layer.addPulse { builder in
-				builder.borderColors = [(sender.on) ? UIColor.greenColor().CGColor : UIColor.whiteColor().CGColor]
+			let _ = view.layer.addPulse { builder in
+				builder.borderColors = [(sender.isOn) ? UIColor.green.cgColor : UIColor.white.cgColor]
 				builder.backgroundColors = colorsWithHalfOpacity(builder.borderColors)
-				builder.path = UIBezierPath(ovalInRect: bounds).CGPath
+				builder.path = UIBezierPath(ovalIn: bounds).cgPath
 			}
 		}
 	}

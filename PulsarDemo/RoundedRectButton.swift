@@ -15,7 +15,7 @@ class RoundedRectButton: UIButton {
 		self.applyTheme()
 	}
 	
-	class func cornerRadiusForRect(rect: CGRect) -> CGFloat {
-		return min(CGRectGetWidth(rect), CGRectGetHeight(rect)) / 4.0
+	class func cornerRadiusForRect(_ rect: CGRect) -> CGFloat {
+		return min(rect.width, rect.height) / 4.0
 	}
 }

@@ -12,7 +12,7 @@ extension CALayer {
 	
 	public typealias PulsarClosure = (Builder) -> ()
 	
-	public func addPulse(closure: PulsarClosure? = nil) -> CAShapeLayer? {
+	public func addPulse(_ closure: PulsarClosure? = nil) -> CAShapeLayer? {
 		guard self.masksToBounds == false else {
 			print("Aborting. CALayers with 'masksToBounds' set to YES cannot show pulse.")
 			return nil
@@ -39,7 +39,7 @@ extension CALayer {
 		
 		CATransaction.commit()
 		
-		self.insertSublayer(pulseLayer, atIndex:0)
+		self.insertSublayer(pulseLayer, at:0)
 
         var pulsarLayers = self.pulsarLayers
         pulsarLayers.append(pulseLayer)
@@ -51,8 +51,8 @@ extension CALayer {
 		alphaAnimation.duration = max(builder.duration, 0.0)
 		
 		let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
-		scaleAnimation.fromValue = NSValue(CATransform3D: builder.transformBefore)
-		scaleAnimation.toValue = NSValue(CATransform3D: builder.transformAfter)
+		scaleAnimation.fromValue = NSValue(caTransform3D: builder.transformBefore)
+		scaleAnimation.toValue = NSValue(caTransform3D: builder.transformAfter)
 		scaleAnimation.duration = max(builder.duration, 0.0)
 		
 		var animations: [CAAnimation] = [alphaAnimation, scaleAnimation]
@@ -78,16 +78,16 @@ extension CALayer {
 		animationGroup.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
 		animationGroup.repeatCount = Float(min(Float(builder.repeatCount), FLT_MAX))
 		animationGroup.delegate = Delegate(pulseLayer: pulseLayer)
-		pulseLayer.addAnimation(animationGroup, forKey: nil)
+		pulseLayer.add(animationGroup, forKey: nil)
 		
 		return pulseLayer
 	}
 	
-    public func removePulse(pulse: CAShapeLayer) {
-        if let index = self.pulsarLayers.indexOf({ $0 === pulse }) {
+    public func removePulse(_ pulse: CAShapeLayer) {
+        if let index = self.pulsarLayers.index(where: { $0 === pulse }) {
             pulse.removeAllAnimations()
             pulse.removeFromSuperlayer()
-            self.pulsarLayers.removeAtIndex(index)
+            self.pulsarLayers.remove(at: index)
         }
     }
 
@@ -104,33 +104,33 @@ extension CALayer {
 			self.setValue(newValue, forKey: PulsarConstants.layersKey)
 		}
 		get {
-			let pulsarLayers = self.valueForKey(PulsarConstants.layersKey) as? [CAShapeLayer]
+			let pulsarLayers = self.value(forKey: PulsarConstants.layersKey) as? [CAShapeLayer]
 			return pulsarLayers ?? []
 		}
 	}
 }
 
 struct PulsarConstants {
-	private static let keyPrefix: String = "Pulsar."
+	fileprivate static let keyPrefix: String = "Pulsar."
 	static let layersKey: String = keyPrefix + "layers"
 }
 
-public typealias PulsarStartClosure = (NSTimeInterval) -> ()
+public typealias PulsarStartClosure = (TimeInterval) -> ()
 public typealias PulsarStopClosure = (Bool) -> ()
 
-public class Builder {
-	public var layer: CALayer
-	public var borderColors: [CGColor]
-	public var backgroundColors: [CGColor]
-	public var path: CGPathRef
-	public var duration: NSTimeInterval = 1.0
-	public var repeatDelay: NSTimeInterval = 0.0
-	public var repeatCount: Int = 0
-	public var lineWidth: CGFloat = 3.0
-	public var transformBefore: CATransform3D = CATransform3DIdentity
-	public var transformAfter: CATransform3D = CATransform3DMakeScale(2.0, 2.0, 1.0)
-	public var startBlock: PulsarStartClosure? = nil
-	public var stopBlock: PulsarStopClosure? = nil
+open class Builder {
+	open var layer: CALayer
+	open var borderColors: [CGColor]
+	open var backgroundColors: [CGColor]
+	open var path: CGPath
+	open var duration: TimeInterval = 1.0
+	open var repeatDelay: TimeInterval = 0.0
+	open var repeatCount: Int = 0
+	open var lineWidth: CGFloat = 3.0
+	open var transformBefore: CATransform3D = CATransform3DIdentity
+	open var transformAfter: CATransform3D = CATransform3DMakeScale(2.0, 2.0, 1.0)
+	open var startBlock: PulsarStartClosure? = nil
+	open var stopBlock: PulsarStopClosure? = nil
 	
 	init(_ layer: CALayer) {
 		self.layer = layer
@@ -139,25 +139,25 @@ public class Builder {
 		self.path = Builder.defaultPathForLayer(layer)
 	}
 
-	class func defaultBackgroundColorsForLayer(layer: CALayer) -> [CGColor] {
+	class func defaultBackgroundColorsForLayer(_ layer: CALayer) -> [CGColor] {
 		switch layer {
 		case let shapeLayer as CAShapeLayer:
 			if let fillColor = shapeLayer.fillColor {
-				let halfAlpha = CGColorGetAlpha(fillColor) * 0.5
-				return [CGColorCreateCopyWithAlpha(fillColor, halfAlpha)!]
+				let halfAlpha = fillColor.alpha * 0.5
+				return [fillColor.copy(alpha: halfAlpha)!]
 			}
 		default:
 			if let backgroundColor = layer.backgroundColor {
-				let halfAlpha = CGColorGetAlpha(backgroundColor) * 0.5
-				return [CGColorCreateCopyWithAlpha(backgroundColor, halfAlpha)!]
+				let halfAlpha = backgroundColor.alpha * 0.5
+				return [backgroundColor.copy(alpha: halfAlpha)!]
 			}
 		}
 		let colorSpace = CGColorSpaceCreateDeviceRGB()
 		let components: [CGFloat] = [1.0, 0.0, 0.0, 0.0]
-		return [CGColorCreate(colorSpace, components)!]
+		return [CGColor(colorSpace: colorSpace, components: components)!]
 	}
 	
-	class func defaultBorderColorsForLayer(layer: CALayer) -> [CGColor] {
+	class func defaultBorderColorsForLayer(_ layer: CALayer) -> [CGColor] {
 		switch layer {
 		case let shapeLayer as CAShapeLayer:
 			if shapeLayer.lineWidth > 0.0 {
@@ -182,27 +182,27 @@ public class Builder {
 		}
 		let colorSpace = CGColorSpaceCreateDeviceRGB()
 		let components: [CGFloat] = [1.0, 0.0, 0.0, 0.0]
-		return [CGColorCreate(colorSpace, components)!]
+		return [CGColor(colorSpace: colorSpace, components: components)!]
 	}
 	
-	class func defaultPathForLayer(layer: CALayer) -> CGPathRef {
+	class func defaultPathForLayer(_ layer: CALayer) -> CGPath {
 		switch layer {
 		case let shapeLayer as CAShapeLayer:
 			return shapeLayer.path!
 		default:
 			let rect = layer.bounds
-			let minSize = min(CGRectGetWidth(rect), CGRectGetHeight(rect))
+			let minSize = min(rect.width, rect.height)
 			let cornerRadius = min(max(0.0, layer.cornerRadius), minSize / 2.0)
 			if cornerRadius > 0.0 {
-				return CGPathCreateWithRoundedRect(rect, cornerRadius, cornerRadius, nil)
+				return CGPath(roundedRect: rect, cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil)
 			} else {
-				return CGPathCreateWithRect(rect, nil)
+				return CGPath(rect: rect, transform: nil)
 			}
 		}
 	}
 }
 
-class Delegate {
+class Delegate: NSObject {
 	
 	let pulseLayer: CAShapeLayer
 	let startBlock: PulsarStartClosure? = nil
@@ -211,19 +211,21 @@ class Delegate {
 	init(pulseLayer: CAShapeLayer) {
 		self.pulseLayer = pulseLayer
 	}
-	
-	func animationDidStart(animation: CAAnimation) {
+}
+
+extension Delegate: CAAnimationDelegate {
+	func animationDidStart(_ animation: CAAnimation) {
 		if let startBlock = self.startBlock {
 			startBlock(animation.duration)
 		}
 	}
 	
-	func animationDidStop(animation: CAAnimation, finished: Bool) {
+	func animationDidStop(_ animation: CAAnimation, finished: Bool) {
         guard var pulseLayers = self.pulseLayer.superlayer?.pulsarLayers else {
             return
         }
-        if let index = pulseLayers.indexOf(self.pulseLayer) {
-            pulseLayers.removeAtIndex(index)
+        if let index = pulseLayers.index(of: self.pulseLayer) {
+            pulseLayers.remove(at: index)
             self.pulseLayer.removeFromSuperlayer()
             if let stopBlock = self.stopBlock {
                 stopBlock(finished)

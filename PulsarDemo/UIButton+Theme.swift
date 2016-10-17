@@ -10,8 +10,8 @@ import UIKit
 
 extension UIButton {
 	func applyTheme() {
-		let fillColor = UIColor(white: 0.0, alpha: 0.25).CGColor
-		let borderColor = UIColor(white: 1.0, alpha: 1.0).CGColor
+		let fillColor = UIColor(white: 0.0, alpha: 0.25).cgColor
+		let borderColor = UIColor(white: 1.0, alpha: 1.0).cgColor
 		if let shapeLayer = self.layer as? CAShapeLayer {
 			shapeLayer.fillColor = fillColor
 			shapeLayer.strokeColor = borderColor

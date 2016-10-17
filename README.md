@@ -56,7 +56,7 @@ builder.repeatCount = 42 // or Int.max for infinity
 
 Just copy the files in `"Pulsar/Classes/..."` into your project.
 
-Alternatively you can install **Pulsar** into your project with [CocoaPods](http://cocoapods.org/).  
+Alternatively you can install **Pulsar** into your project with [CocoaPods](http://cocoapods.org/).
 Just add it to your Podfile: `pod 'Pulsar'`
 
 ## Demos
@@ -65,7 +65,7 @@ Just add it to your Podfile: `pod 'Pulsar'`
 
 ## Swift
 
-**Pulsar** is implemented in **Swift**.
+**Pulsar** is implemented in **Swift 3**.
 
 ## Dependencies
 

@@ -15,7 +15,7 @@ class CircleButton: UIButton {
 		self.applyTheme()
 	}
 	
-	class func cornerRadiusForRect(rect: CGRect) -> CGFloat {
-		return min(CGRectGetWidth(rect), CGRectGetHeight(rect)) / 2.0
+	class func cornerRadiusForRect(_ rect: CGRect) -> CGFloat {
+		return min(rect.width, rect.height) / 2.0
 	}
 }
