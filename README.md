@@ -1,3 +1,4 @@
+![jumbotron](jumbotron.png)
 # Pulsar
 
 **Pulsar** is a versatile solution for **displaying pulse animations** as known from **Apple Maps**.
