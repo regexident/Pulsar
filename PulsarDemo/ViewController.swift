@@ -35,28 +35,28 @@ class ViewController: UIViewController {
 	}
 	
 	func addRepeatingPulseToProgressIndicator() {
-		let _ = self.activityIndicatorView.layer.addPulse { builder in
-			builder.borderColors = [UIColor.clear.cgColor, UIColor.black.cgColor]
-			builder.backgroundColors = colorsWithHalfOpacity(builder.borderColors)
-			builder.path = UIBezierPath(ovalIn: self.activityIndicatorView.bounds).cgPath
-			builder.transformBefore = CATransform3DMakeScale(0.65, 0.65, 0.0)
-			builder.duration = 2.0
-			builder.repeatDelay = 0.0
-			builder.repeatCount = Int.max
-			builder.lineWidth = 2.0
-			builder.backgroundColors = []
+		let _ = self.activityIndicatorView.layer.addPulse { pulse in
+			pulse.borderColors = [UIColor.clear.cgColor, UIColor.black.cgColor]
+			pulse.backgroundColors = colorsWithHalfOpacity(pulse.borderColors)
+			pulse.path = UIBezierPath(ovalIn: self.activityIndicatorView.bounds).cgPath
+			pulse.transformBefore = CATransform3DMakeScale(0.65, 0.65, 0.0)
+			pulse.duration = 2.0
+			pulse.repeatDelay = 0.0
+			pulse.repeatCount = Int.max
+			pulse.lineWidth = 2.0
+			pulse.backgroundColors = []
 		}
 	}
 
 	@IBAction func didTriggerActionOnStarButton(_ sender: StarButton) {
-		let _ = sender.layer.addPulse { builder in
-			builder.borderColors = [
+		let _ = sender.layer.addPulse { pulse in
+			pulse.borderColors = [
 				UIColor.green.cgColor,
 				UIColor.yellow.cgColor,
 				UIColor.yellow.cgColor,
 				UIColor.red.cgColor
 			]
-			builder.backgroundColors = colorsWithHalfOpacity(builder.borderColors)
+			pulse.backgroundColors = colorsWithHalfOpacity(pulse.borderColors)
 		}
 	}
 	
@@ -65,11 +65,11 @@ class ViewController: UIViewController {
 	}
 	
 	@IBAction func didTriggerActionOnCircleButton(_ sender: CircleButton) {
-		let _ = sender.layer.addPulse { builder in
-			builder.borderColors = [
+		let _ = sender.layer.addPulse { pulse in
+			pulse.borderColors = [
 				UIColor(hue: CGFloat(arc4random()) / CGFloat(RAND_MAX), saturation: 1.0, brightness: 1.0, alpha: 1.0).cgColor
 			]
-			builder.backgroundColors = colorsWithHalfOpacity(builder.borderColors)
+			pulse.backgroundColors = colorsWithHalfOpacity(pulse.borderColors)
 		}
 	}
 	
@@ -81,10 +81,10 @@ class ViewController: UIViewController {
 			let bounds = view.bounds
 			let path = CGPath(ellipseIn: bounds, transform: nil)
 			let saturation = CGFloat(sender.value)
-			let _ = view.layer.addPulse { builder in
-				builder.borderColors = [UIColor(hue: 0.6, saturation: saturation, brightness: 1.0, alpha: 1.0).cgColor]
-				builder.backgroundColors = colorsWithHalfOpacity(builder.borderColors)
-				builder.path = path
+			let _ = view.layer.addPulse { pulse in
+				pulse.borderColors = [UIColor(hue: 0.6, saturation: saturation, brightness: 1.0, alpha: 1.0).cgColor]
+				pulse.backgroundColors = colorsWithHalfOpacity(pulse.borderColors)
+				pulse.path = path
 			}
 		}
 	}
@@ -102,10 +102,10 @@ class ViewController: UIViewController {
 				width: bounds.height,
 				height: bounds.height
 			)
-			let _ = view.layer.addPulse { builder in
-				builder.borderColors = [(sender.isOn) ? UIColor.green.cgColor : UIColor.white.cgColor]
-				builder.backgroundColors = colorsWithHalfOpacity(builder.borderColors)
-				builder.path = UIBezierPath(ovalIn: bounds).cgPath
+			let _ = view.layer.addPulse { pulse in
+				pulse.borderColors = [(sender.isOn) ? UIColor.green.cgColor : UIColor.white.cgColor]
+				pulse.backgroundColors = colorsWithHalfOpacity(pulse.borderColors)
+				pulse.path = UIBezierPath(ovalIn: bounds).cgPath
 			}
 		}
 	}

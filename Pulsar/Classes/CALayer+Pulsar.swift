@@ -10,100 +10,52 @@ import QuartzCore
 
 extension CALayer {
 	
-	public func addPulse(_ closure: ((Builder) -> ())? = nil) -> CAShapeLayer? {
+	public func addPulse(_ closure: ((Pulse) -> ())? = nil) -> PulseLayer? {
 		guard self.masksToBounds == false else {
 			NSLog("Warning: CALayers with 'masksToBounds' set to YES cannot show pulse.")
 			return nil
 		}
 		
-		let builder = Builder(self)
+		let pulse = Pulse(self)
 		if let closure = closure {
-			closure(builder)
+			closure(pulse)
 		}
 		
-		let pulseLayer = CAShapeLayer()
-		
-		CATransaction.begin()
-		CATransaction.setDisableActions(true)
-		
-		assert((builder.borderColors.count > 0) || (builder.backgroundColors.count > 0))
-		
-		pulseLayer.fillColor = builder.backgroundColors.first
-		pulseLayer.frame = self.bounds
-		pulseLayer.opacity = 0.0
-		pulseLayer.path = builder.path
-		pulseLayer.strokeColor = builder.borderColors.first
-		pulseLayer.lineWidth = builder.lineWidth
-		
-		CATransaction.commit()
-		
-		self.insertSublayer(pulseLayer, at:0)
+		let pulseLayer = PulseLayer(pulse: pulse)
+        pulseLayer.frame = self.bounds
+        self.insertSublayer(pulseLayer, at:0)
 
-        var pulsarLayers = self.pulsarLayers
-        pulsarLayers.append(pulseLayer)
-        self.pulsarLayers = pulsarLayers
-		
-		let alphaAnimation = CABasicAnimation(keyPath: "opacity")
-		alphaAnimation.fromValue = 1.0
-		alphaAnimation.toValue = 0.0
-		alphaAnimation.duration = max(builder.duration, 0.0)
-		
-		let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
-		scaleAnimation.fromValue = NSValue(caTransform3D: builder.transformBefore)
-		scaleAnimation.toValue = NSValue(caTransform3D: builder.transformAfter)
-		scaleAnimation.duration = max(builder.duration, 0.0)
-		
-		var animations: [CAAnimation] = [alphaAnimation, scaleAnimation]
-		
-		if (builder.borderColors.count > 1) {
-			let colorAnimation = CAKeyframeAnimation(keyPath: "strokeColor")
-			colorAnimation.values = builder.borderColors
-			animations.append(colorAnimation)
-		}
-		
-		if (builder.backgroundColors.count > 1) {
-			let colorAnimation = CAKeyframeAnimation(keyPath: "fillColor")
-			colorAnimation.values = builder.backgroundColors
-			animations.append(colorAnimation)
-		}
-		
-		let animationGroup = CAAnimationGroup()
-		animationGroup.duration = max(builder.duration, 0.0)
-		if builder.repeatCount > 0 {
-			animationGroup.duration += max(builder.repeatDelay, 0.0)
-		}
-		animationGroup.animations = animations
-		animationGroup.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
-        animationGroup.repeatCount = min(Float(builder.repeatCount), Float.greatestFiniteMagnitude)
-		animationGroup.delegate = Delegate(pulseLayer: pulseLayer)
-		pulseLayer.add(animationGroup, forKey: nil)
-		
+        let animation = PulseLayer.pulseAnimation(from: pulse)
+        animation.delegate = Delegate(pulseLayer: pulseLayer)
+        pulseLayer.add(animation, forKey: "pulse")
+
+        self.pulseLayers.append(pulseLayer)
+
 		return pulseLayer
 	}
 	
     public func removePulse(_ pulse: CAShapeLayer) {
-        if let index = self.pulsarLayers.index(where: { $0 === pulse }) {
+        if let index = self.pulseLayers.index(where: { $0 === pulse }) {
             pulse.removeAllAnimations()
             pulse.removeFromSuperlayer()
-            self.pulsarLayers.remove(at: index)
+            self.pulseLayers.remove(at: index)
         }
     }
 
     public func removePulses() {
-		for pulseLayer in self.pulsarLayers {
+		for pulseLayer in self.pulseLayers {
 			pulseLayer.removeAllAnimations()
 			pulseLayer.removeFromSuperlayer()
 		}
-		self.pulsarLayers = []
+		self.pulseLayers = []
 	}
 	
-	var pulsarLayers: [CAShapeLayer] {
+	var pulseLayers: [PulseLayer] {
 		set {
 			self.setValue(newValue, forKey: PulsarConstants.layersKey)
 		}
 		get {
-			let pulsarLayers = self.value(forKey: PulsarConstants.layersKey) as? [CAShapeLayer]
-			return pulsarLayers ?? []
+			return self.value(forKey: PulsarConstants.layersKey) as? [PulseLayer] ?? []
 		}
 	}
 }
@@ -116,25 +68,81 @@ struct PulsarConstants {
 public typealias PulsarStartClosure = (TimeInterval) -> ()
 public typealias PulsarStopClosure = (Bool) -> ()
 
-open class Builder {
-	open var layer: CALayer
-	open var borderColors: [CGColor]
-	open var backgroundColors: [CGColor]
-	open var path: CGPath
-	open var duration: TimeInterval = 1.0
-	open var repeatDelay: TimeInterval = 0.0
-	open var repeatCount: Int = 0
-	open var lineWidth: CGFloat = 3.0
-	open var transformBefore: CATransform3D = CATransform3DIdentity
-	open var transformAfter: CATransform3D = CATransform3DMakeScale(2.0, 2.0, 1.0)
-	open var startBlock: PulsarStartClosure? = nil
-	open var stopBlock: PulsarStopClosure? = nil
+public class PulseLayer: CAShapeLayer {
+    private enum Key: String {
+        case pulse
+    }
+
+    init(pulse: Pulse) {
+        super.init()
+
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        self.fillColor = pulse.backgroundColors.first
+        self.opacity = 0.0
+        self.path = pulse.path
+        self.strokeColor = pulse.borderColors.first
+        self.lineWidth = pulse.lineWidth
+        CATransaction.commit()
+    }
+    
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
+    class func pulseAnimation(from pulse: Pulse) -> CAAnimation {
+        let alphaAnimation = CABasicAnimation(keyPath: "opacity")
+        alphaAnimation.fromValue = 1.0
+        alphaAnimation.toValue = 0.0
+        alphaAnimation.duration = max(pulse.duration, 0.0)
+
+        let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation.fromValue = NSValue(caTransform3D: pulse.transformBefore)
+        scaleAnimation.toValue = NSValue(caTransform3D: pulse.transformAfter)
+        scaleAnimation.duration = max(pulse.duration, 0.0)
+
+        var animations: [CAAnimation] = [alphaAnimation, scaleAnimation]
+        if pulse.borderColors.count > 1 {
+            let colorAnimation = CAKeyframeAnimation(keyPath: "strokeColor")
+            colorAnimation.values = pulse.borderColors
+            animations.append(colorAnimation)
+        }
+
+        if pulse.backgroundColors.count > 1 {
+            let colorAnimation = CAKeyframeAnimation(keyPath: "fillColor")
+            colorAnimation.values = pulse.backgroundColors
+            animations.append(colorAnimation)
+        }
+
+        let animationGroup = CAAnimationGroup()
+        animationGroup.duration = max(pulse.duration, 0.0)
+        if pulse.repeatCount > 0 {
+            animationGroup.duration += max(pulse.repeatDelay, 0.0)
+        }
+        animationGroup.animations = animations
+        animationGroup.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
+        animationGroup.repeatCount = min(Float(pulse.repeatCount), Float.greatestFiniteMagnitude)
+        return animationGroup
+    }
+}
+
+public class Pulse {
+	public var borderColors: [CGColor]
+	public var backgroundColors: [CGColor]
+	public var path: CGPath
+	public var duration: TimeInterval = 1.0
+	public var repeatDelay: TimeInterval = 0.0
+	public var repeatCount: Int = 0
+	public var lineWidth: CGFloat = 3.0
+	public var transformBefore: CATransform3D = CATransform3DIdentity
+	public var transformAfter: CATransform3D = CATransform3DMakeScale(2.0, 2.0, 1.0)
+	public var startBlock: PulsarStartClosure? = nil
+	public var stopBlock: PulsarStopClosure? = nil
 	
 	init(_ layer: CALayer) {
-		self.layer = layer
-		self.borderColors = Builder.defaultBorderColorsForLayer(layer)
-		self.backgroundColors = Builder.defaultBackgroundColorsForLayer(layer)
-		self.path = Builder.defaultPathForLayer(layer)
+		self.borderColors = Pulse.defaultBorderColorsForLayer(layer)
+		self.backgroundColors = Pulse.defaultBackgroundColorsForLayer(layer)
+		self.path = Pulse.defaultPathForLayer(layer)
 	}
 
 	class func defaultBackgroundColorsForLayer(_ layer: CALayer) -> [CGColor] {
@@ -206,11 +214,11 @@ open class Builder {
 }
 
 class Delegate: NSObject {
-	let pulseLayer: CAShapeLayer
+	let pulseLayer: PulseLayer
 	let startBlock: PulsarStartClosure? = nil
 	let stopBlock: PulsarStopClosure? = nil
 	
-	init(pulseLayer: CAShapeLayer) {
+	init(pulseLayer: PulseLayer) {
 		self.pulseLayer = pulseLayer
 	}
 }
@@ -223,7 +231,7 @@ extension Delegate: CAAnimationDelegate {
 	}
 	
 	func animationDidStop(_ animation: CAAnimation, finished: Bool) {
-        guard var pulseLayers = self.pulseLayer.superlayer?.pulsarLayers else {
+        guard var pulseLayers = self.pulseLayer.superlayer?.pulseLayers else {
             return
         }
         if let index = pulseLayers.index(of: self.pulseLayer) {
