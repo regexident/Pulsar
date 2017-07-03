@@ -10,10 +10,9 @@ import QuartzCore
 
 extension CALayer {
 	
-	public func addPulse(_ closure: ((Pulse) -> ())? = nil) -> PulseLayer? {
-		guard self.masksToBounds == false else {
-			NSLog("Warning: CALayers with 'masksToBounds' set to YES cannot show pulse.")
-			return nil
+	public func addPulse(_ closure: ((Pulse) -> ())? = nil) -> PulseLayer {
+		if self.masksToBounds == true {
+			NSLog("Warning: CALayers with 'self.masksToBounds = true' might not show a pulse.")
 		}
 		
 		let pulse = Pulse(self)
@@ -22,7 +21,6 @@ extension CALayer {
 		}
 		
 		let pulseLayer = PulseLayer(pulse: pulse)
-        pulseLayer.frame = self.bounds
         self.insertSublayer(pulseLayer, at:0)
 
         let animation = PulseLayer.pulseAnimation(from: pulse)
@@ -34,7 +32,7 @@ extension CALayer {
 		return pulseLayer
 	}
 	
-    public func removePulse(_ pulse: CAShapeLayer) {
+    public func removePulse(_ pulse: PulseLayer) {
         if let index = self.pulseLayers.index(where: { $0 === pulse }) {
             pulse.removeAllAnimations()
             pulse.removeFromSuperlayer()
@@ -78,6 +76,7 @@ public class PulseLayer: CAShapeLayer {
 
         CATransaction.begin()
         CATransaction.setDisableActions(true)
+        self.frame = pulse.frame
         self.fillColor = pulse.backgroundColors.first
         self.opacity = 0.0
         self.path = pulse.path
@@ -96,7 +95,7 @@ public class PulseLayer: CAShapeLayer {
         alphaAnimation.toValue = 0.0
         alphaAnimation.duration = max(pulse.duration, 0.0)
 
-        let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
+        let scaleAnimation = CABasicAnimation(keyPath: "transform")
         scaleAnimation.fromValue = NSValue(caTransform3D: pulse.transformBefore)
         scaleAnimation.toValue = NSValue(caTransform3D: pulse.transformAfter)
         scaleAnimation.duration = max(pulse.duration, 0.0)
@@ -129,23 +128,26 @@ public class PulseLayer: CAShapeLayer {
 public class Pulse {
 	public var borderColors: [CGColor]
 	public var backgroundColors: [CGColor]
-	public var path: CGPath
+	public var frame: CGRect
+    public var path: CGPath
 	public var duration: TimeInterval = 1.0
 	public var repeatDelay: TimeInterval = 0.0
 	public var repeatCount: Int = 0
 	public var lineWidth: CGFloat = 3.0
 	public var transformBefore: CATransform3D = CATransform3DIdentity
-	public var transformAfter: CATransform3D = CATransform3DMakeScale(2.0, 2.0, 1.0)
+	public var transformAfter: CATransform3D
 	public var startBlock: PulsarStartClosure? = nil
 	public var stopBlock: PulsarStopClosure? = nil
 	
 	init(_ layer: CALayer) {
-		self.borderColors = Pulse.defaultBorderColorsForLayer(layer)
-		self.backgroundColors = Pulse.defaultBackgroundColorsForLayer(layer)
-		self.path = Pulse.defaultPathForLayer(layer)
+		self.borderColors = Pulse.defaultBorderColors(for: layer)
+		self.backgroundColors = Pulse.defaultBackgroundColors(for: layer)
+        self.frame = Pulse.defaultFrame(for: layer)
+		self.path = Pulse.defaultPath(for: layer)
+        self.transformAfter = Pulse.defaultTransformAfter(for: layer)
 	}
 
-	class func defaultBackgroundColorsForLayer(_ layer: CALayer) -> [CGColor] {
+	private class func defaultBackgroundColors(for layer: CALayer) -> [CGColor] {
 		switch layer {
 		case let shapeLayer as CAShapeLayer:
 			if let fillColor = shapeLayer.fillColor {
@@ -163,7 +165,7 @@ public class Pulse {
 		return [CGColor(colorSpace: colorSpace, components: components)!]
 	}
 	
-	class func defaultBorderColorsForLayer(_ layer: CALayer) -> [CGColor] {
+	private class func defaultBorderColors(for layer: CALayer) -> [CGColor] {
 		switch layer {
 		case let shapeLayer as CAShapeLayer:
 			if shapeLayer.lineWidth > 0.0 {
@@ -190,8 +192,12 @@ public class Pulse {
 		let components: [CGFloat] = [1.0, 0.0, 0.0, 0.0]
 		return [CGColor(colorSpace: colorSpace, components: components)!]
 	}
-	
-	class func defaultPathForLayer(_ layer: CALayer) -> CGPath {
+
+    private class func defaultFrame(for layer: CALayer) -> CGRect {
+        return layer.bounds
+    }
+
+	private class func defaultPath(for layer: CALayer) -> CGPath {
 		switch layer {
 		case let shapeLayer as CAShapeLayer:
 			return shapeLayer.path!
@@ -211,6 +217,15 @@ public class Pulse {
 			}
 		}
 	}
+
+    private class func defaultTransformAfter(for layer: CALayer) -> CATransform3D {
+        let anchorPoint = layer.anchorPoint
+        var transform = CATransform3DIdentity
+        transform = CATransform3DTranslate(transform, anchorPoint.x, anchorPoint.y, 0.0);
+        transform = CATransform3DScale(transform, 2.0, 2.0, 1.0);
+        transform = CATransform3DTranslate(transform, -anchorPoint.x, -anchorPoint.y, 0.0);
+        return transform
+    }
 }
 
 class Delegate: NSObject {
