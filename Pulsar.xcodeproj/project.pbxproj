@@ -213,10 +213,12 @@
 				TargetAttributes = {
 					A411CF2E1A84D3090053A6F8 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = RHSV5Y8MLD;
 						LastSwiftMigration = 0800;
 					};
 					A411CF5E1A8501180053A6F8 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = RHSV5Y8MLD;
 						LastSwiftMigration = 0800;
 					};
 				};

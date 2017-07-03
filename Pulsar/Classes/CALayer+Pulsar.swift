@@ -10,11 +10,9 @@ import QuartzCore
 
 extension CALayer {
 	
-	public typealias PulsarClosure = (Builder) -> ()
-	
-	public func addPulse(_ closure: PulsarClosure? = nil) -> CAShapeLayer? {
+	public func addPulse(_ closure: ((Builder) -> ())? = nil) -> CAShapeLayer? {
 		guard self.masksToBounds == false else {
-			print("Aborting. CALayers with 'masksToBounds' set to YES cannot show pulse.")
+			NSLog("Warning: CALayers with 'masksToBounds' set to YES cannot show pulse.")
 			return nil
 		}
 		
@@ -76,7 +74,7 @@ extension CALayer {
 		}
 		animationGroup.animations = animations
 		animationGroup.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
-		animationGroup.repeatCount = Float(min(Float(builder.repeatCount), FLT_MAX))
+        animationGroup.repeatCount = min(Float(builder.repeatCount), Float.greatestFiniteMagnitude)
 		animationGroup.delegate = Delegate(pulseLayer: pulseLayer)
 		pulseLayer.add(animationGroup, forKey: nil)
 		
@@ -194,7 +192,12 @@ open class Builder {
 			let minSize = min(rect.width, rect.height)
 			let cornerRadius = min(max(0.0, layer.cornerRadius), minSize / 2.0)
 			if cornerRadius > 0.0 {
-				return CGPath(roundedRect: rect, cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil)
+				return CGPath(
+                    roundedRect: rect,
+                    cornerWidth: cornerRadius,
+                    cornerHeight: cornerRadius,
+                    transform: nil
+                )
 			} else {
 				return CGPath(rect: rect, transform: nil)
 			}
@@ -203,7 +206,6 @@ open class Builder {
 }
 
 class Delegate: NSObject {
-	
 	let pulseLayer: CAShapeLayer
 	let startBlock: PulsarStartClosure? = nil
 	let stopBlock: PulsarStopClosure? = nil
