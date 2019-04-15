@@ -32,7 +32,7 @@ extension CALayer {
 	}
 	
     public func removePulse(_ pulse: PulseLayer) {
-        if let index = self.pulseLayers.index(where: { $0 === pulse }) {
+        if let index = self.pulseLayers.firstIndex(where: { $0 === pulse }) {
             pulse.removeAllAnimations()
             pulse.removeFromSuperlayer()
             self.pulseLayers.remove(at: index)
