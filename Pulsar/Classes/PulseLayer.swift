@@ -83,7 +83,7 @@ public class PulseLayer: CAShapeLayer {
         if pulse.borderColors.count > 1 {
             let strokeColorAnimation = CAKeyframeAnimation(keyPath: "strokeColor")
             strokeColorAnimation.values = pulse.borderColors
-            transformAnimation.duration = max(pulse.duration, 0.0)
+            strokeColorAnimation.duration = max(pulse.duration, 0.0)
             strokeColorAnimation.isRemovedOnCompletion = false
             animations.append(strokeColorAnimation)
         }
@@ -91,7 +91,7 @@ public class PulseLayer: CAShapeLayer {
         if pulse.backgroundColors.count > 1 {
             let fillColorAnimation = CAKeyframeAnimation(keyPath: "fillColor")
             fillColorAnimation.values = pulse.backgroundColors
-            transformAnimation.duration = max(pulse.duration, 0.0)
+            fillColorAnimation.duration = max(pulse.duration, 0.0)
             fillColorAnimation.isRemovedOnCompletion = false
             animations.append(fillColorAnimation)
         }
