@@ -29,7 +29,7 @@ extension AnimationDelegate: CAAnimationDelegate {
         guard var pulseLayers = self.pulseLayer.superlayer?.pulseLayers else {
             return
         }
-        if let index = pulseLayers.index(of: self.pulseLayer) {
+        if let index = pulseLayers.firstIndex(of: self.pulseLayer) {
             pulseLayers.remove(at: index)
             self.pulseLayer.removeFromSuperlayer()
             if let stopBlock = self.stopBlock {
